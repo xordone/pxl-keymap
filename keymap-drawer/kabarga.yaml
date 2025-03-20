@@ -6,7 +6,7 @@ layers:
   - W
   - E
   - R
-  - {t: T, h: '#'}
+  - {t: T, h: '`'}
   - Y
   - U
   - I
@@ -169,7 +169,7 @@ layers:
   - $$mdi:dance-ballroom$$
   - {t: '$$mdi:minus-circle-outline$$', type: held}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - etc
+  - ETC
   - {t: '$$mdi:minus-circle-outline$$', type: held}
   - {t: GAME, h: toggle}
   GAME:
@@ -215,7 +215,7 @@ layers:
   - RET
   - $$mdi:apple-keyboard-shift$$
   - $$mdi:apple-keyboard-option$$
-  etc:
+  ETC:
   - $$mdi:bluetooth-off$$
   - {t: '$$mdi:bluetooth-connect$$', h: '0'}
   - {t: '$$mdi:bluetooth-connect$$', h: '1'}
