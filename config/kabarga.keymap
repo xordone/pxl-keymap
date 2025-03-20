@@ -1,0 +1,195 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+// #include <dt-bindings/zmk/bt.h>
+// #include <dt-bindings/zmk/outputs.h>
+// #include <dt-bindings/zmk/ext_power.h>
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+
+#define MAIN    0
+#define NUM     1
+#define NAV     2
+#define SYM     3
+#define GAME    4
+
+&sk { quick-release; };
+
+&mt { flavor = "tap-preferred"; };
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+
+        boot {
+            bindings = <&bootloader>;
+            key-positions = <24 35>;
+            layers = <4>;
+        };
+    };
+
+    macros {
+        comma: comma {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LS(FSLH) &kp SPACE>;
+            label = "COMMA";
+            wait-ms = <20>;
+            tap-ms = <20>;
+        };
+
+        dot: dot {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FSLH &kp SPACE &sk LSHIFT>;
+            label = "DOT";
+            wait-ms = <20>;
+            tap-ms = <20>;
+        };
+
+        unlock: unlock {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp D &kp F &kp C &kp B &kp K &kp B &kp Q &kp RET>;
+            label = "UNLOCK";
+        };
+
+        macos: macos {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp N &kp A &kp G &kp O &kp R &kp S &kp H &kp K &kp E>;
+            label = "MACOS";
+        };
+
+        raspberrypi: raspberrypi {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp S &kp I &kp D &kp E &kp L &kp K &kp O &kp R &kp O &kp L &kp RET>;
+            label = "RASPBERRYPI";
+        };
+
+        en_lang: en_lang {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(LS(N0))>;
+            label = "EN_LANG";
+        };
+
+        ru_lang: ru_lang {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LS(LC(N1))>;
+            label = "RU_LANG";
+        };
+    };
+
+    behaviors {
+        tap_comma: tap_comma {
+            compatible = "zmk,behavior-hold-tap";
+            label = "TAP_COMMA";
+            bindings = <&mo>, <&comma>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <400>;
+        };
+
+        tap_dot: tap_dot {
+            compatible = "zmk,behavior-hold-tap";
+            label = "TAP_DOT";
+            bindings = <&mo>, <&dot>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <400>;
+        };
+
+        td_tester: td_tester {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TD_TESTER";
+            #binding-cells = <0>;
+            bindings = <&unlock>, <&macos>, <&raspberrypi>;
+        };
+
+        ru: ru {
+            compatible = "zmk,behavior-hold-tap";
+            label = "RU";
+            bindings = <&kp>, <&ru_lang>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <400>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        main {
+            bindings = <
+&gresc      &kp Q  &kp W  &kp E      &kp R           &mt GRAVE T            &kp Y  &kp U               &kp I         &kp O          &kp P     &kp LEFT_BRACKET
+&kp TAB     &kp A  &kp S  &kp D      &kp F           &kp G                 &kp H  &kp J               &kp K         &kp L          &kp SEMI  &kp SQT
+&ru LALT 0  &kp Z  &kp X  &kp C      &kp V           &kp B                 &kp N  &mt RBKT M          &kp COMMA     &kp DOT        &kp FSLH  &en_lang
+                          &kp LCTRL  &tap_comma 1 0  &mt LEFT_SHIFT SPACE         &mt LEFT_SHIFT RET  &tap_dot 2 0  &kp BACKSPACE
+            >;
+
+            label = "MAIN";
+        };
+
+        num {
+            bindings = <
+&none         &kp N1  &kp N2  &kp N3     &kp N4  &kp N5     &kp N6  &kp N7   &kp N8  &kp N9      &kp N0   &gresc
+&kp F11       &kp F1  &kp F2  &kp F3     &kp F4  &kp F5     &kp F6  &kp F7   &kp F8  &kp F9      &kp F10  &kp F12
+&kp LEFT_ALT  &none   &none   &none      &none   &none      &none   &none    &none   &none       &none    &none
+                              &kp LCTRL  &none   &kp SPACE          &kp RET  &mo 3   &kp DELETE
+            >;
+
+            label = "NUM";
+        };
+
+        nav {
+            bindings = <
+&none  &none  &none  &none      &none  &none      &none  &kp LC(LEFT)  &kp LC(UP)  &kp LC(DOWN)       &kp LC(RIGHT)  &to 0
+&none  &none  &none  &none      &none  &none      &none  &kp LEFT      &kp UP      &kp DOWN           &kp RIGHT      &none
+&none  &none  &none  &none      &none  &none      &none  &kp HOME      &kp PG_UP   &kp PG_DN          &kp END        &none
+                     &kp LCTRL  &mo 3  &kp SPACE         &kp RET       &none       &kp LC(BACKSPACE)
+            >;
+
+            label = "NAV";
+        };
+
+        sym {
+            bindings = <
+&none         &kp EXCL  &kp AT  &kp HASH    &kp DLLR  &kp PRCNT  &kp CARET  &kp AMPS   &kp ASTRK  &kp LPAR  &kp RPAR  &gresc
+&kp TAB       &none     &none   &none       &none     &none      &kp MINUS  &kp EQUAL  &kp LBKT   &kp RBKT  &kp BSLH  &kp GRAVE
+&kp LEFT_ALT  &none     &none   &none       &none     &none      &kp UNDER  &kp PLUS   &kp LBRC   &kp RBRC  &kp PIPE  &kp TILDE
+                                &td_tester  &none     &none                 &mo 5      &none      &to 4
+            >;
+
+            label = "SYM";
+        };
+
+        game {
+            bindings = <
+&kp ESC    &kp Q  &kp W  &kp E             &kp R      &kp T      &none         &none     &kp UP     &none      &none   &to 0
+&kp TAB    &kp A  &kp S  &kp D             &kp F      &kp G      &none         &kp LEFT  &kp DOWN   &kp RIGHT  &none   &kp LALT
+&kp LSHFT  &kp Z  &kp X  &kp C             &kp V      &kp B      &kp NUMBER_1  &kp N2    &kp N3     &kp N4     &kp N5  &kp TAB
+                         &kp LEFT_CONTROL  &kp LSHFT  &kp SPACE                &kp RET   &kp LSHFT  &kp LALT
+            >;
+
+            label = "GAME";
+        };
+
+        etc {
+            bindings = <
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &none  &out OUT_USB  &none  &none  &none  &none
+&none       &none         &none         &none         &none         &none         &none  &none         &none  &none  &none  &none
+&none       &none         &none         &none         &none         &out OUT_BLE  &none  &none         &none  &none  &none  &none
+                                        &none         &none         &none                &none         &none  &none
+            >;
+            label = "ETC";
+        };
+    };
+};
